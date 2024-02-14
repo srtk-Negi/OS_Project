@@ -7,37 +7,42 @@ char *argumentList[10];
 
 int main()
 {
-    printf("shell$ ");
-    int i = 0;
-    for (i = 0; i < 10; i++)
+    while (1)
     {
-        argumentList[i] = (char *)malloc(sizeof(char) * 81);
-        argumentList[i] = NULL;
-    }
-    char str[1000];
-    fgets(str, 1000, stdin);
-
-    tokenArray = strtok(str, " \n");
-
-    i = 0;
-
-    while (tokenArray != NULL)
-    {
-        if (i == 0)
+        int i = 0;
+        for (i = 0; i < 10; i++)
         {
-            char *command = strdup(tokenArray);
+            argumentList[i] = (char *)malloc(sizeof(char) * 81);
+            argumentList[i] = NULL;
         }
 
-        argumentList[i] = strdup(tokenArray);
-        tokenArray = strtok(NULL, " \n");
-        i++;
-    }
+        printf("\033[0;31mshell$ ");
+        printf("\033[0m");
+        char str[1000];
+        fgets(str, 1000, stdin);
 
-    for (i = 0; i < 10; i++)
-    {
-        if (argumentList[i] != NULL)
+        tokenArray = strtok(str, " \n");
+
+        i = 0;
+
+        while (tokenArray != NULL)
         {
-            printf("%s\n", argumentList[i]);
+            if (i == 0)
+            {
+                char *command = strdup(tokenArray);
+            }
+
+            argumentList[i] = strdup(tokenArray);
+            tokenArray = strtok(NULL, " \n");
+            i++;
+        }
+
+        for (i = 0; i < 10; i++)
+        {
+            if (argumentList[i] != NULL)
+            {
+                printf("%s\n", argumentList[i]);
+            }
         }
     }
 }
