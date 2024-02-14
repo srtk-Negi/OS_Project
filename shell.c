@@ -18,31 +18,40 @@ int main()
 
         printf("\033[0;31mshell$ ");
         printf("\033[0m");
+
         char str[1000];
-        fgets(str, 1000, stdin);
-
-        tokenArray = strtok(str, " \n");
-
-        i = 0;
-
-        while (tokenArray != NULL)
+        if (fgets(str, 1000, stdin))
         {
-            if (i == 0)
+
+            tokenArray = strtok(str, " \n");
+
+            i = 0;
+
+            while (tokenArray != NULL)
             {
-                char *command = strdup(tokenArray);
+                if (i == 0)
+                {
+                    char *command = strdup(tokenArray);
+                }
+
+                argumentList[i] = strdup(tokenArray);
+                tokenArray = strtok(NULL, " \n");
+                i++;
             }
 
-            argumentList[i] = strdup(tokenArray);
-            tokenArray = strtok(NULL, " \n");
-            i++;
+            for (i = 0; i < 10; i++)
+            {
+                if (argumentList[i] != NULL)
+                {
+                    printf("%s\n", argumentList[i]);
+                }
+            }
         }
 
-        for (i = 0; i < 10; i++)
+        if (strncmp(str, "exit", 4) == 0)
         {
-            if (argumentList[i] != NULL)
-            {
-                printf("%s\n", argumentList[i]);
-            }
+            printf("Exiting shell\n");
+            break;
         }
     }
 }
