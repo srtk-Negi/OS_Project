@@ -38,14 +38,6 @@ int main()
                 tokenArray = strtok(NULL, " \n");
                 i++;
             }
-
-            for (i = 0; i < 10; i++)
-            {
-                if (argumentList[i] != NULL)
-                {
-                    printf("%s\n", argumentList[i]);
-                }
-            }
         }
 
         if (strncmp(str, "exit", 4) == 0)
