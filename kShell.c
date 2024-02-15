@@ -11,8 +11,7 @@ char *argumentList[10];
 int a = 0;
 int idList[5];
 
-void chgDir(char *path, char *currDir)
-{
+void chgDir(char *path, char *currDir){
     if (chdir(path) == -1)
     {
         printf("Error: Cannot change directory\n");
@@ -24,8 +23,7 @@ void chgDir(char *path, char *currDir)
     }
     setenv("pwd", currDir, 1);
 }
-void showpid(int idList[])
-{
+void showpid(int idList[]){
     for (int i = 0; i < 5; i++)
     {
         printf("%d\n", idList[i]);
@@ -77,9 +75,7 @@ int main()
                 else if (strcmp(command, "showpid") == 0)
                 {
                     showpid(idList);
-                }
-                else
-                {
+                }else{
                     // Child process code does here
                     if ((pid = fork()) == 0)
                     {
@@ -91,8 +87,12 @@ int main()
                         }
                         kill(pid, SIGTERM);
                     }
-                    else
-                    {
+                    else{
+                        if(a == 5){
+                            a = 0;
+                        }
+                        idList[a] = pid;
+                        a++;
                         waitpid(pid, &status, 0);
                     }
                 }
