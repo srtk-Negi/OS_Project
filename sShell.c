@@ -1,42 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
-char *tokenArr;
-char *argumentList[10];
-int i = 0;
-
-void chgDir(char *path, char *currDir)
+void performExit()
 {
-    if (chdir(path) == -1)
-    {
-        printf("Error: Cannot change directory\n");
-        return;
-    }
-    if ((getcwd(currDir, 1000)) == NULL)
-    {
-        perror("getcwd() error");
-    }
-    setenv("PWD", currDir, 1);
+    printf("EXITING!\n");
+    exit(0);
 }
 
-void showpid(int idList[])
+void showpid()
 {
-    for (i = 0; i < 5; i++)
-    {
-        printf("%d\n", idList[i]);
-    }
-    return;
+    printf("SHOWPID!\n");
 }
+
+void changeDirectory()
+{
+    printf("CHANGING DIRECTORY!\n");
+}
+
 int main()
 {
-    char currDir[1000];
-    if ((getcwd(currDir, 1000)) == NULL)
-    {
-    }
+    char *tokenArr;
+    char *argumentList[10];
+    char *command;
+    int i;
+
     while (1)
     {
-        for (i = 0; i < 10; i++) // Malloc a char* pointer with longth of 81 and initialize it to NULL
+        for (i = 0; i < 10; i++)
 
         {
             argumentList[i] = (char *)malloc(sizeof(char) * 81);
@@ -47,56 +40,59 @@ int main()
         printf("\033[0m");
 
         char str[1000];
+
         if (fgets(str, 1000, stdin) != NULL)
         {
-            // Do coding as needed
-        }
-        tokenArr = strtok(str, "");
-        i = 0;
-        while (tokenArr != NULL)
-        {
-            if (i == 0)
+            tokenArr = strtok(str, " ");
+            i = 0;
+            while (tokenArr != NULL)
             {
-                char *command; // Declare the 'command' variable
-                command = strdup(tokenArr);
+                if (i == 0)
+                {
+                    command = strdup(tokenArr);
+                }
+                argumentList[i] = strdup(tokenArr);
+                tokenArr = strtok(NULL, " ");
+                i++;
             }
-            argumentList[i] = strdup(tokenArr);
-            tokenArr = strtok(NULL, " ");
-            i++;
         }
-        char *command;
-        if (strcmp(command, "cd") == 0)
+        if (strncmp(command, "exit", 4) == 0)
         {
-            chgDir(argumentList[1], currDir);
+            performExit();
         }
-        else if (strcmp(command, "showpid") == 0)
+        else if (strncmp(command, "showpid", 7) == 0)
         {
-            int idList[5] = {1, 2, 3, 4, 5};
-            showpid(idList);
+            showpid();
+        }
+        else if (strncmp(command, "cd", 2) == 0)
+        {
+            changeDirectory();
         }
         else
         {
-        }
-        if ((pid = fork()) == 0)
-        {
-            int execStatus;
-            execStatus = execvp(command, argumentList);
-            if (execStatus == -1)
+            pid_t pid = fork();
+            if (pid < 0)
             {
-                printf("Error: Command not could not be executed\n");
+                perror("fork");
                 exit(1);
             }
-            kill(pid, SIGTERM);
-        }
-        else
-        {
-            int status;
-            waitpid(pid, &status, 0);
-        }
-        if (strncmp(str, "exit", 4) == 0)
-        {
-            printf("EXITING!\n");
-            break;
+            else if (pid == 0)
+            {
+                if (execvp(command, argumentList) < 0)
+                {
+                    perror("execvp");
+                    exit(EXIT_FAILURE);
+                }
+            }
+            else
+            {
+                int status;
+                if (waitpid(pid, &status, 0) < 0)
+                {
+                    perror("waitpid");
+                    exit(EXIT_FAILURE);
+                }
+            }
         }
     }
 }
