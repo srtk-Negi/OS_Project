@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *tokenArr; // token array
+char *tokenArr;
 char *argumentList[10];
 int i = 0;
 
@@ -42,7 +42,7 @@ int main()
             argumentList[i] = (char *)malloc(sizeof(char) * 81);
             argumentList[i] = NULL;
         }
-        // Get user input using fgets
+
         printf("\033[0;31mshell$ ");
         printf("\033[0m");
 
@@ -64,7 +64,7 @@ int main()
             tokenArr = strtok(NULL, " ");
             i++;
         }
-        char *command; // Declare the 'command' variable
+        char *command;
         if (strcmp(command, "cd") == 0)
         {
             chgDir(argumentList[1], currDir);
@@ -76,7 +76,6 @@ int main()
         }
         else
         {
-            // Parent Process code goes here
         }
         if ((pid = fork()) == 0)
         {
@@ -91,8 +90,7 @@ int main()
         }
         else
         {
-            // Parent process  (your shell program itself)
-            int status; // Declare the 'status' variable
+            int status;
             waitpid(pid, &status, 0);
         }
         if (strncmp(str, "exit", 4) == 0)
@@ -100,6 +98,5 @@ int main()
             printf("EXITING!\n");
             break;
         }
-        // Do something with input
     }
 }

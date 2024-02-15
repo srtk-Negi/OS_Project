@@ -6,7 +6,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-char *tokenArr; // token array
+char *tokenArr;
 char *argumentList[10];
 int a = 0;
 int idList[5];
