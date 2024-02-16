@@ -14,19 +14,18 @@ int main()
 {
     pid_t pid;
     int i = 0;
-    int a = 0; // track idList
-    int tokenCount = 0;
+    int a = 0;
     int *status = 0;
     int execStatus = 0;
     int idList[5] = {0, 0, 0, 0, 0};
-    int argc = 0; // Keep track of # of arguments
+    int argc = 0;
     char str[1000] = "";
     char *command = "";
-    char *tokenArr; // token array
+    char *tokenArr;
     char *argumentList[10];
     char currDir[1000];
 
-    for (i = 0; i < 10; i++) // Malloc a char* pointer with length 81 and initialize it to null
+    for (i = 0; i < 10; i++)
     {
         argumentList[i] = (char *)malloc(sizeof(char) * 81);
         argumentList[i] = NULL;
@@ -39,13 +38,11 @@ int main()
 
     while (1)
     {
-        // Get user input using fgets
         printf("\033[0;31m%s$ ", currDir);
-        printf("\033[0m"); // Reset from red
+        printf("\033[0m");
         if (fgets(str, 1000, stdin) != NULL)
         {
             char *p;
-            // check exist newline
             p = strchr(str, '\n');
             if (p != NULL)
             {
@@ -53,13 +50,11 @@ int main()
             }
             else
             {
-                // clear upto newline
                 scanf("%*[^\n]");
                 scanf("%*c");
             }
         }
 
-        // Remove the '\n' character from fgets
         for (i = 0; i < strlen(str); i++)
         {
             if (str[i] == '\n')
@@ -75,18 +70,7 @@ int main()
             break;
         }
 
-        // Using strtok to create tokens and count each token as one word
         tokenArr = strtok(str, " ");
-        /*
-        while(tokenArr != NULL)
-        {
-            printf("token is: %s\n", tokenArr);
-            tokenCount++;
-            tokenArr = strtok(NULL, " ");
-        }
-
-        printf("Number of words: %d\n", tokenCount);
-        */
 
         i = 0;
         while (tokenArr != NULL)
@@ -97,7 +81,6 @@ int main()
             }
             argumentList[i] = strdup(tokenArr);
             argc++;
-            tokenCount++;
             tokenArr = strtok(NULL, " ");
             i++;
         }
@@ -134,17 +117,13 @@ int main()
             }
         }
 
-        // Reset variables
         for (i = 0; i < argc; i++)
         {
             argumentList[i] = NULL;
         }
-
-        tokenCount = 0;
         argc = 0;
     }
 
-    // Free argumentList pointers
     for (i = 0; i < argc; i++)
     {
         free(argumentList[i]);

@@ -1,5 +1,5 @@
-sShell: sShell.c
-	gcc -o sShell sShell.c
+shell: shell.c
+	gcc -Wall shell.c -o shell
 
 clean:
-	rm sShell.o
+	rm shell
